@@ -10,10 +10,6 @@ from Crypto.Cipher import AES
 
 from util import *;
 
-
-key = b"TheNeuralNineKey"
-nonce = b"TheNeuralNineNce"
-
 ext_name = {
     "txt": "text",
     "mp4": "video",
