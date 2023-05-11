@@ -6,22 +6,40 @@ import tqdm
 from Crypto.Cipher import AES
 from util import createfolder
 
-client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-client.bind(("localhost",3000))
-client.listen()
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM) # create a socket object
+client.bind(("localhost",3000)) # bind to 3000 port 
+client.listen() # listen for connections
 
 canaccept = True 
 
 def handleclient(conn,addr):
+    """
+    handleclient is a function which handles the client
+
+    Parameters:
+        conn: the connection object
+        addr: the address of the client
+
+    Returns:
+        None
+    """
+
+    global canaccept
+    global total
     print("{0} started getting served".format(addr))
 
     fileDone = False
     allDone = False
     
     while not allDone:
+        # fileDone is a boolean which tells whether the file is done or not
+        # allDone is a boolean which tells whether all the files are done or not
+
         file_bytes = b""
-        filename = conn.recv(1024).decode("utf-8")
-        filesize = conn.recv(1024).decode("utf-8")
+
+        filename = conn.recv(1024).decode("utf-8") # get the filename
+        filesize = conn.recv(1024).decode("utf-8") # get the filesize
+
         print("filename: {0}".format(filename))
         print("filesize: {0}".format(filesize))
 
@@ -32,8 +50,11 @@ def handleclient(conn,addr):
         progress = tqdm.tqdm(unit="B",unit_scale=True,
                         unit_divisor=1000,
                         total=int(filesize))
+        
         while not fileDone:
+            # get all file bytes
             data = conn.recv(1024)
+            
             if file_bytes[-5:0] == b"<End>":
                 fileDone = True
             if file_bytes[-8:0] == b"<AllEnd>":
