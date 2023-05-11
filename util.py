@@ -1,7 +1,6 @@
 from colorama import Style, Fore, Back
 import os
 
-END_OF_TRANSMISSION = "\u0004"
 CANCEL = "\u0012"
 
 def createfolder(foldername):
